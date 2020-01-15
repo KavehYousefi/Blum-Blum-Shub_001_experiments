@@ -146,10 +146,10 @@
      lambda(x[n+1]) => integer-encoded-random-bits
    ---
    Examplary usage:
-     (let ((bbs (make-blum-blum-shub-generator :p 11 :q 19 :seed 3)))
+     (let ((random-generator (make-blum-blum-shub-generator :p 11 :q 19
+                                                            :seed 3)))
        (loop repeat 7 do
-         (multiple-value-bind (bit x[n+1]) (funcall bbs)
-           (format T \"~&x[n+1] = ~d => bit = ~d\" x[n+1] bit))))"
+         (print funcall (random-generator))))"
   (declare (integer p q seed))
   (let ((M (* p q)))
     (declare (integer M))
