@@ -149,7 +149,7 @@
      (let ((random-generator (make-blum-blum-shub-generator :p 11 :q 19
                                                             :seed 3)))
        (loop repeat 7 do
-         (print funcall (random-generator))))"
+         (print (funcall random-generator))))"
   (declare (integer p q seed))
   (let ((M (* p q)))
     (declare (integer M))
