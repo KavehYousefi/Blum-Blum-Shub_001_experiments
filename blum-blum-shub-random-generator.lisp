@@ -95,8 +95,8 @@
 (defun count-one-bits (bits)
   "Returns the number of bits in the integer-encoded BITS that equal 1."
   (declare (integer bits))
-  (loop for bit-index from 0 below (integer-length bits)
-        when (logbitp bit-index bits) sum 1))
+  (loop for   bit-index from 0 below (integer-length bits)
+        count (logbitp bit-index bits)))
 
 ;;; -------------------------------------------------------
 
