@@ -124,6 +124,8 @@
 
 ;;; -------------------------------------------------------
 
+(declaim (ftype (function (integer) integer) output-generator))
+
 (defun make-blum-blum-shub-generator (&key p q seed
                              (output-generator +LEAST-SIGNIFICANT-BIT+))
   "Creates and returns a nullary function which represents a simple
@@ -148,8 +150,11 @@
        (loop repeat 7 do
          (multiple-value-bind (bit x[n+1]) (funcall bbs)
            (format T \"~&x[n+1] = ~d => bit = ~d\" x[n+1] bit))))"
+  (declare (integer p q seed))
   (let ((M (* p q)))
+    (declare (integer M))
     (let ((x0 seed))
+      (declare (integer x0))
       #'(lambda ()
           (setf x0 (mod (* x0 x0) M))
           (let ((output-bits (funcall output-generator x0)))
