@@ -94,7 +94,7 @@
 
 (defun count-one-bits (bits)
   "Returns the number of bits in the integer-encoded BITS that equal 1."
-  (declare (integer bits))
+  (declare (type integer bits))
   (loop for   bit-index from 0 below (integer-length bits)
         count (logbitp bit-index bits)))
 
@@ -102,7 +102,7 @@
 
 (defparameter +EVEN-PARITY-BIT+
   #'(lambda (x[n+1])
-      (declare (integer x[n+1]))
+      (declare (type integer x[n+1]))
       (mod (count-one-bits x[n+1]) 2))
   "Returns 0 if x[n+1] contains an even number of 1-bits, otherwise 0.")
 
@@ -110,7 +110,7 @@
 
 (defparameter +ODD-PARITY-BIT+
   #'(lambda (x[n+1])
-      (declare (integer x[n+1]))
+      (declare (type integer x[n+1]))
       (if (evenp (count-one-bits x[n+1])) 1 0))
   "Returns 0 if x[n+1] contains an odd number of 1-bits, otherwise 1.")
 
@@ -118,7 +118,7 @@
 
 (defparameter +LEAST-SIGNIFICANT-BIT+
   #'(lambda (x[n+1])
-      (declare (integer x[n+1]))
+      (declare (type integer x[n+1]))
       (if (logbitp 0 x[n+1]) 1 0))
   "Extracts the least significant bits from x[n+1].")
 
@@ -150,11 +150,11 @@
                                                             :seed 3)))
        (loop repeat 7 do
          (print (funcall random-generator))))"
-  (declare (integer p q seed))
+  (declare (type integer p q seed))
   (let ((M (* p q)))
-    (declare (integer M))
+    (declare (type integer M))
     (let ((x0 seed))
-      (declare (integer x0))
+      (declare (type integer x0))
       #'(lambda ()
           (setf x0 (mod (* x0 x0) M))
           (let ((output-bits (funcall output-generator x0)))
