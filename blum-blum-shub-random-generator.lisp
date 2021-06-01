@@ -6,8 +6,7 @@
 ;; ---------------------------------------------------------------------
 ;; 
 ;; Author: Kaveh Yousefi
-;; 
-;; Date: 2020-01-14
+;; Date:   2020-01-14
 ;; 
 ;; Sources:
 ;;   -> "https://en.wikipedia.org/wiki/Blum_Blum_Shub"
@@ -43,12 +42,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun bitnum (bits)
-  "Returns the number of 1-bits which comprimise the integer-encoded BITS."
-  (let ((number-of-bits (integer-length bits)))
-    (loop
-      for  bit-index from 0 below number-of-bits
-      when (logbitp bit-index bits)
-      sum  1)))
+  "Returns the number of 1-bits which compromise the integer-encoded BITS."
+  (declare (type unsigned-byte bits))
+  (the (integer 0 *) (logcount bits)))
 
 ;;; -------------------------------------------------------
 
@@ -93,10 +89,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun count-one-bits (bits)
-  "Returns the number of bits in the integer-encoded BITS that equal 1."
-  (declare (type integer bits))
-  (loop for   bit-index from 0 below (integer-length bits)
-        count (logbitp bit-index bits)))
+  "Returns the number of 1-bits which compromise the integer-encoded BITS."
+  (declare (type unsigned-byte bits))
+  (the (integer 0 *) (logcount bits)))
 
 ;;; -------------------------------------------------------
 
@@ -212,7 +207,3 @@
 (let ((random-generator (make-blum-blum-shub-random-generator :p 11 :q 19 :seed 3)))
   (loop repeat 7 do
     (print (get-next-random-number random-generator))))
-
-
-
-
