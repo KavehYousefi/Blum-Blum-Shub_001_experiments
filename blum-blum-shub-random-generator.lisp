@@ -185,25 +185,64 @@
 ;; -- Test 05: Object-oriented design.                             -- ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defstruct (Blum-Blum-Shub-Random-Generator
-  (:constructor make-blum-blum-shub-random-generator (&key p q (M (* p q)) seed (x0 seed))))
-  (p    0 :type integer)
-  (q    0 :type integer)
-  (M    0 :type integer)
-  (seed 0 :type integer)
-  (x0   0 :type integer))
+(defclass Blum-Blum-Shub-Random-Generator ()
+  ((p
+    :initarg       :p
+    :initform      0
+    :type          (integer 1 *)
+    :documentation "The first prime number used to calculate M.")
+   (q
+    :initarg       :q
+    :initform      0
+    :type          (integer 1 *)
+    :documentation "The second prime number used to calculate M.")
+   (M
+    :initarg       :M
+    :initform      0
+    :type          (integer 1 *)
+    :documentation "The product of the two large prime numbers p and q.")
+   (seed
+    :initarg       :seed
+    :initform      0
+    :type          (integer 1 *)
+    :documentation "The seed x0 or s.")
+   (xn
+    :initarg       :xn
+    :initform      0
+    :type          (integer 1 *)
+    :documentation "The current pseudo-random number xn.
+                    Is initially set to the SEED."))
+  (:documentation
+    "The ``Blum-Blum-Shub-Random-Generator'' class represents a
+     pseudo-random integer number generator based on the Blum-Blum-Shub
+     concept."))
+
+;;; -------------------------------------------------------
+
+(defun make-blum-blum-shub-random-generator (&key p q (M (* p q)) seed)
+  (declare (type (integer 1 *) p))
+  (declare (type (integer 1 *) q))
+  (declare (type (integer 1 *) M))
+  (declare (type (integer 1 *) seed))
+  (the Blum-Blum-Shub-Random-Generator
+    (make-instance 'Blum-Blum-Shub-Random-Generator
+      :p p :q q :M M :seed seed :xn seed)))
 
 ;;; -------------------------------------------------------
 
 ;; Output is based upon the least significant bit.
 (defun get-next-random-number (blum-blum-shub-generator)
-  (with-slots (x0 M) blum-blum-shub-generator
-    (setf x0 (mod (* x0 x0) M))
-    (let ((output (ldb (byte 1 0) x0)))
-      (list output x0))))
+  (declare (type Blum-Blum-Shub-Random-Generator blum-blum-shub-generator))
+  (with-slots (xn M) blum-blum-shub-generator
+    (declare (type (integer 1 *) xn))
+    (declare (type (integer 1 *) M))
+    (setf xn (mod (* xn xn) M))
+    (let ((output (ldb (byte 1 0) xn)))
+      (list output xn))))
 
 ;;; -------------------------------------------------------
 
 (let ((random-generator (make-blum-blum-shub-random-generator :p 11 :q 19 :seed 3)))
+  (declare (type Blum-Blum-Shub-Random-Generator random-generator))
   (loop repeat 7 do
     (print (get-next-random-number random-generator))))
